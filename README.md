@@ -33,6 +33,12 @@ source install/setup.bash
 ros2 launch warehouse_bot.git complete.launch.py
 ```
 
+## To Do
+
+* Replace simple wheeled bot with a forklift model
+* Add ROSA node for LLM 3.5 control
+* Add computer vision node to recognize boxes and pallets
+
 ## History / Current State
 
 v0.1: Basic 3 wheeled bot with differential drive.  World is a small warehouse.  Camera and LiDAR stream data and can be visualized in rviz2.
