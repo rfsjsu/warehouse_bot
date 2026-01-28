@@ -8,7 +8,7 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    pkg_share = get_package_share_directory('diffbot_description')
+    pkg_share = get_package_share_directory('warehouse_bot')
     
     # Path to the custom world file
     world_file_name = 'Depot/model.sdf' #'test.world'
@@ -24,7 +24,7 @@ def generate_launch_description():
     )
 
     # URDF file
-    urdf_file = os.path.join(pkg_share, 'urdf', 'diffbot.urdf')
+    urdf_file = os.path.join(pkg_share, 'urdf', 'warehouse_bot.urdf')
     
     with open(urdf_file, 'r') as infp:
         robot_desc = infp.read()
@@ -46,7 +46,7 @@ def generate_launch_description():
         package='ros_gz_sim',
         executable='create',
         arguments=['-topic', 'robot_description',
-                  '-name', 'diffbot',
+                  '-name', 'warehouse_bot',
                   '-z', '0.1'],
         output='screen'
     )

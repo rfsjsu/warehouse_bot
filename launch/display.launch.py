@@ -6,13 +6,13 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 def generate_launch_description():
-    pkg_share = get_package_share_directory('diffbot_description')
+    pkg_share = get_package_share_directory('warehouse_bot')
     
     # URDF file
-    urdf_file = os.path.join(pkg_share, 'urdf', 'diffbot.urdf')
+    urdf_file = os.path.join(pkg_share, 'urdf', 'warehouse_bot.urdf')
     
     # RViz configuration file
-    rviz_config = os.path.join(pkg_share, 'rviz', 'diffbot.rviz')
+    rviz_config = os.path.join(pkg_share, 'rviz', 'warehouse_bot.rviz')
     
     with open(urdf_file, 'r') as infp:
         robot_desc = infp.read()
