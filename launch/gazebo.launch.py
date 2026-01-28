@@ -6,6 +6,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+import xacro    
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('warehouse_bot')
@@ -24,10 +25,12 @@ def generate_launch_description():
     )
 
     # URDF file
-    urdf_file = os.path.join(pkg_share, 'urdf', 'warehouse_bot.urdf')
-    
-    with open(urdf_file, 'r') as infp:
-        robot_desc = infp.read()
+    # urdf_file = os.path.join(pkg_share, 'urdf', 'warehouse_bot.urdf')
+    # with open(urdf_file, 'r') as infp:
+    #     robot_desc = infp.read()
+
+    xacro_file = os.path.join(pkg_share, 'urdf', 'cangozpi_forklift/forklift.urdf.xacro')
+    robot_desc = xacro.process_file(xacro_file).toxml()
 
     # Robot State Publisher
     robot_state_publisher = Node(
@@ -47,7 +50,7 @@ def generate_launch_description():
         executable='create',
         arguments=['-topic', 'robot_description',
                   '-name', 'warehouse_bot',
-                  '-z', '0.1'],
+                  '-x', '0.0', '-z', '0.1'],
         output='screen'
     )
 

@@ -4,18 +4,21 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+import xacro   
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('warehouse_bot')
-    
-    # URDF file
-    urdf_file = os.path.join(pkg_share, 'urdf', 'warehouse_bot.urdf')
-    
+
     # RViz configuration file
     rviz_config = os.path.join(pkg_share, 'rviz', 'warehouse_bot.rviz')
     
-    with open(urdf_file, 'r') as infp:
-        robot_desc = infp.read()
+    # URDF file
+    # urdf_file = os.path.join(pkg_share, 'urdf', 'warehouse_bot.urdf')
+    # with open(urdf_file, 'r') as infp:
+    #     robot_desc = infp.read()
+
+    xacro_file = os.path.join(pkg_share, 'urdf', 'cangozpi_forklift/forklift.urdf.xacro')
+    robot_desc = xacro.process_file(xacro_file).toxml()
 
     # Robot State Publisher
     robot_state_publisher = Node(
