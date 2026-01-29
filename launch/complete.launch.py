@@ -56,7 +56,7 @@ def generate_launch_description():
         executable='create',
         arguments=['-topic', 'robot_description',
                   '-name', 'warehouse_bot',
-                  '-z', '0.1'],
+                  '-z', '0.2'],
         output='screen'
     )
 
