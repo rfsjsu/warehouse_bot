@@ -62,6 +62,15 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}],
     )
 
+    # Joint State Publisher GUI
+    # Without this the forklift fork is stuck at the origin when changing
+    # the fixed frame.
+    joint_state_publisher_gui = Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
+        name='joint_state_publisher_gui'
+    )
+
     # Spawn robot
     spawn_entity = Node(
         package='ros_gz_sim',
@@ -107,6 +116,7 @@ def generate_launch_description():
         gazebo,
         robot_state_publisher,
         joint_state_publisher,
+        joint_state_publisher_gui,
         bridge,
         spawn_entity,
         slam_launch,
