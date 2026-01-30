@@ -30,14 +30,30 @@ To run Gazebo Sim and RViz:
 ```
 cd ~/ros2_ws
 source install/setup.bash
-ros2 launch warehouse_bot.git complete.launch.py
+ros2 launch warehouse_bot complete.launch.py
 ```
 
 ## To Do
 
-* Replace simple wheeled bot with a forklift model
+* Replace simple wheeled bot with a forklift model 
+    * Partially Done: Model constructed, forklift doesn't move up/down.
+    * Has one 2D LiDAR and 1 forward facing camera.
+* Add collision detection.
+    * The current forklift passes right through boxes and walls.
 * Add ROSA node for LLM 3.5 control
-* Add computer vision node to recognize boxes and pallets
+    * Layout the world in a grid, the agent can go to a specified grid and report its location.
+    * Couple with computer vision and the agent can say what it sees if asked.
+* Set up Nav2
+    * SLAM to make a map of the warehouse.
+* Upgrade LiDAR
+    * Current lidar is 2D, missing objects too low.
+    * Upgrade to 3D lidar so we can get point cloud image of shelves.
+* Add computer vision node
+    * Recognize boxes and pallets with object detection.
+    * Localization of objects on the map (e.g. "there is a box at grid 17")
+    * Segmentation of pallets and recognize where the fork fits under the pallet.
+* Setup framework for reinforcement learning
+    * First attempt should be to get to a defined location and pose, i.e. properly lined up to pick up a pallet.
 
 ## History / Current State
 
