@@ -30,7 +30,7 @@ To run Gazebo Sim and RViz:
 ```
 cd ~/ros2_ws
 source install/setup.bash
-ros2 launch warehouse_bot.git complete.launch.py
+ros2 launch warehouse_bot complete.launch.py
 ```
 
 ## History / Current State
