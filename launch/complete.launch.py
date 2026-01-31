@@ -10,7 +10,8 @@ def generate_launch_description():
     pkg_share = get_package_share_directory('warehouse_bot')
     
         # Path to the custom world file
-    world_file_name = 'Depot/model.sdf' #'test.world'
+    # world_file_name = 'Depot/model.sdf' #'test.world'
+    world_file_name = 'test.world'
     world_path = os.path.join(pkg_share, 'world', world_file_name)
     
     # Gazebo launch
@@ -56,6 +57,8 @@ def generate_launch_description():
         executable='create',
         arguments=['-topic', 'robot_description',
                   '-name', 'warehouse_bot',
+                  '-x', '0.0',
+                  '-y', '0.0',
                   '-z', '0.2'],
         output='screen'
     )
@@ -82,12 +85,13 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-            '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-            '/camera/image_raw@sensor_msgs/msg/Image@gz.msgs.Image',
-                   '/camera/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo',
-                   '/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-                  '/joint_states@sensor_msgs/msg/JointState@gz.msgs.Model'],
+        arguments=[ '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+                    '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+                    '/camera/image_raw@sensor_msgs/msg/Image@gz.msgs.Image',
+                    '/camera/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo',
+                    '/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
+                    '/joint_states@sensor_msgs/msg/JointState@gz.msgs.Model',
+                    '/tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V'],
         output='screen'
     )
 
