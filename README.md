@@ -11,11 +11,16 @@ Links to their Github code are found in those articles.
 
 ## How To Build And Run The Code
 
+### Prerequisites to run the code:
 This code was developed with
 * Linux Mint 22.3 (equivalent to Ubuntu 24.04)
-* ROS2 Jazzy
+* ROS2 Jazzy (including`ros-jazzy-ros-gz`)
 * Python 3.12
+* Nav2
 
+### In addition, it depends on the following to compile:
+* Colcon
+* Cmake
 
 To build:
 ```
@@ -23,6 +28,7 @@ mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 git clone https://github.com/rfsjsu/warehouse_bot.git
 cd ~/ros2_ws
+source /opt/ros/jazzy/setup.bash
 colcon build --packages-select warehouse_bot --symlink-install
 ```
 
