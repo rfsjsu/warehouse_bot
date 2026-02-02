@@ -80,16 +80,38 @@ def generate_launch_description():
 
     # Bridge
     bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        arguments=['/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-            '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-            '/camera/image_raw@sensor_msgs/msg/Image@gz.msgs.Image',
-                   '/camera/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo',
-                   '/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-                  '/joint_states@sensor_msgs/msg/JointState@gz.msgs.Model'],
-        output='screen'
-    )
+    package='ros_gz_bridge',
+    executable='parameter_bridge',
+    arguments=[
+
+        # ROS/Gazebo command velocity
+        '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+        # ROS/Gazebo odomometry
+        '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+        # ROS/Gazebo TF 
+        '/model/warehouse_bot/tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
+        # ROS/Gazebo sensors
+        '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+        '/camera/image_raw@sensor_msgs/msg/Image@gz.msgs.Image',
+        '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+    ],
+    remappings=[
+        # Force TF data onto ROS topic name
+        ('/model/warehouse_bot/tf', '/tf'),
+    ],
+    output='screen'
+)
+
+
+
+    # LLM
+    # llm_agent = Node(
+    #     package="warehouse_bot",
+    #     executable="ros2_ai_agent",
+    #     name="llm_agent",
+    #     parameters=[{"use_sim_time": True}],
+    #     output="screen",
+    # )
 
 #    return LaunchDescription([
 #        gazebo,
@@ -107,5 +129,6 @@ def generate_launch_description():
         bridge,
         spawn_entity,
         slam_launch,
+        # llm_agent,
         rviz,
     ])
