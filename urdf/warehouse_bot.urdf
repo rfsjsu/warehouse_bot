@@ -56,9 +56,9 @@
     </link>
 
     <joint name="base_footprint_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="base_footprint"/>
-    <origin xyz="0 0 -0.05"/>
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+        <origin xyz="0 0 -0.05"/>
     </joint>
 
     <!-- Body Link -->
@@ -364,7 +364,7 @@
             <odom_publisher_frequency>50</odom_publisher_frequency>
             <left_joint>left_wheel_joint</left_joint>
             <right_joint>right_wheel_joint</right_joint>
-            <wheel_separation>0.35</wheel_separation>
+            <wheel_separation>1.15</wheel_separation>
             <wheel_diameter>0.2</wheel_diameter>
             <max_wheel_torque>20</max_wheel_torque>
             <max_linear_acceleration>1.0</max_linear_acceleration>
