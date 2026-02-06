@@ -7,6 +7,19 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 def generate_launch_description():
+    voice_cmd = ExecuteProcess(
+    cmd=[
+        '/home/minsu/ros2_ws/.venv/bin/python',
+        '/home/minsu/ros2_ws/src/warehouse_bot/warehouse_voice/warehouse_voice/voice_whisper_claude_cmdvel.py',
+        '--ros-args',
+        '-p', 'require_wake_word:=true',
+        '-p', 'wake_word:=robot',
+        '-p', 'chunk_sec:=3.0'
+    ],
+    output='screen', 
+    emulate_tty=True 
+    )    
+
     pkg_share = get_package_share_directory('warehouse_bot')
     
         # Path to the custom world file
@@ -91,6 +104,20 @@ def generate_launch_description():
         output='screen'
     )
 
+    # ROS-Gazeo Translate 
+    joint_state_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '/world/default/model/warehouse_bot/joint_state'
+            '@sensor_msgs/msg/JointState[gz.msgs.Model'
+        ],
+        remappings=[
+            ('/world/default/model/warehouse_bot/joint_state', '/joint_states')
+        ],
+        output='screen'
+    )
+
 #    return LaunchDescription([
 #        gazebo,
 #        robot_state_publisher,
@@ -108,4 +135,6 @@ def generate_launch_description():
         spawn_entity,
         slam_launch,
         rviz,
+        joint_state_bridge,
+        voice_cmd,
     ])
