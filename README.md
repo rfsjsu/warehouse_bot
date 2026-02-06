@@ -1,228 +1,66 @@
-# warehouse_bot — Voice-Controlled Robot in Gazebo (ROS 2 Jazzy)
+# warehouse_bot
+MSAI project: Autonomous forklift
 
-This repo runs a warehouse robot in **Gazebo Sim (gz sim)** with visualization in **RViz2**.  
-It also includes a **voice control pipeline**:
+This code originated from two tutorials by Ibrahim Mansur and Mike Hart:
 
-- **faster-whisper (local STT)**: microphone audio → text
-- **Claude (LLM)**: text → structured robot command (JSON)
-- **ROS 2**: publish `geometry_msgs/Twist` to `/cmd_vel`
-- **ros_gz_bridge**: `/cmd_vel` bridged into Gazebo → robot moves
+* https://ibrahimmansur4.medium.com/building-a-differential-drive-robot-in-ros-2-from-urdf-to-gazebo-classic-simulation-23960714e2a9
+* https://mikelikesrobots.github.io/blog/llm-robot-control/
 
-> Tested on Ubuntu 24.04 / Linux Mint 22.x base, ROS 2 Jazzy.
 
----
+Links to their Github code are found in those articles.
 
-## Repo Structure (important)
+## How To Build And Run The Code
 
-This single git repo contains multiple ROS packages:
+### Prerequisites to run the code:
+This code was developed with
+* Linux Mint 22.3 (equivalent to Ubuntu 24.04)
+* ROS2 Jazzy (including`ros-jazzy-ros-gz`)
+* Python 3.12
+* Nav2
 
-warehouse_bot/ (git repo root)
-├── launch/
-│ └── complete.launch.py (starts Gazebo + RViz + bridges + voice)
-├── warehouse_voice/ (ROS package: voice pipeline)
-│ ├── package.xml
-│ ├── setup.py
-│ └── warehouse_voice/
-│ └── voice_whisper_claude_cmdvel.py
-└── ... (other warehouse_bot files)
+### In addition, it depends on the following to compile:
+* Colcon
+* Cmake
 
-yaml
-Copy code
-
-> NOTE: `warehouse_voice` is inside this repo, but in a typical ROS workspace we also expose it under `~/ros2_ws/src/warehouse_voice` via a symlink for easier `colcon` discovery.
-
----
-
-## Prerequisites
-
-### System packages
-```bash
-sudo apt update
-sudo apt install -y \
-  python3-venv python3-full python3-pip \
-  portaudio19-dev \
-  wmctrl
-ROS 2 Jazzy installed
-Assumes ROS 2 Jazzy is installed at:
-
-/opt/ros/jazzy/setup.bash
-
-1) Create a ROS 2 workspace and clone this repo
-bash
-Copy code
+To build:
+```
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
-
-# clone your branch (example)
-git clone <YOUR_REPO_URL> warehouse_bot
-cd warehouse_bot
-git checkout <YOUR_BRANCH_NAME>
-2) Create Python virtualenv (required)
-We use a venv because Ubuntu 24.04 often blocks system-wide pip installs (PEP 668).
-
-bash
-Copy code
-cd ~/ros2_ws
-python3 -m venv .venv
-source ~/ros2_ws/.venv/bin/activate
-python -m pip install -U pip
-Install dependencies:
-
-bash
-Copy code
-pip install sounddevice numpy faster-whisper anthropic
-(Optional: if you see warnings about jinja2/typeguard)
-
-bash
-Copy code
-pip install jinja2 typeguard
-Quick sanity check:
-
-bash
-Copy code
-python -c "import sounddevice, numpy; print('OK:', sounddevice.__version__)"
-3) Expose warehouse_voice to colcon (one-time symlink)
-Because warehouse_voice is nested inside the repo, some setups won’t discover it reliably unless it appears under ~/ros2_ws/src/.
-
-Create a symlink once:
-
-bash
-Copy code
-rm -rf ~/ros2_ws/src/warehouse_voice
-ln -s ~/ros2_ws/src/warehouse_bot/warehouse_voice ~/ros2_ws/src/warehouse_voice
-Verify:
-
-bash
-Copy code
-ls -la ~/ros2_ws/src | grep warehouse_voice
-Expected output includes something like:
-
-bash
-Copy code
-warehouse_voice -> /home/<user>/ros2_ws/src/warehouse_bot/warehouse_voice
-4) Build the workspace
-bash
-Copy code
+git clone https://github.com/rfsjsu/warehouse_bot.git
 cd ~/ros2_ws
 source /opt/ros/jazzy/setup.bash
+colcon build --packages-select warehouse_bot --symlink-install
+```
 
-rm -rf build install log
-colcon build --symlink-install
-5) Set your Claude API key (required for voice parsing)
-In the terminal you will launch from:
-
-bash
-Copy code
-export ANTHROPIC_API_KEY="YOUR_KEY_HERE"
-Tip (optional): persist it in ~/.bashrc:
-
-bash
-Copy code
-echo 'export ANTHROPIC_API_KEY="YOUR_KEY_HERE"' >> ~/.bashrc
-source ~/.bashrc
-6) Run (single command)
-Open a fresh terminal:
-
-bash
-Copy code
+To run Gazebo Sim and RViz:
+```
 cd ~/ros2_ws
-source /opt/ros/jazzy/setup.bash
 source install/setup.bash
-
-# key must be in env
-export ANTHROPIC_API_KEY="YOUR_KEY_HERE"
-
 ros2 launch warehouse_bot complete.launch.py
-Expected:
+```
 
-Gazebo server + GUI opens
+## To Do
 
-RViz opens
+* Replace simple wheeled bot with a forklift model 
+    * Partially Done: Model constructed, forklift doesn't move up/down.
+    * Has one 2D LiDAR and 1 forward facing camera.
+* Add collision detection.
+    * The current forklift passes right through boxes and walls.
+* Add ROSA node for LLM 3.5 control
+    * Layout the world in a grid, the agent can go to a specified grid and report its location.
+    * Couple with computer vision and the agent can say what it sees if asked.
+* Set up Nav2
+    * SLAM to make a map of the warehouse.
+* Upgrade LiDAR
+    * Current lidar is 2D, missing objects too low.
+    * Upgrade to 3D lidar so we can get point cloud image of shelves.
+* Add computer vision node
+    * Recognize boxes and pallets with object detection.
+    * Localization of objects on the map (e.g. "there is a box at grid 17")
+    * Segmentation of pallets and recognize where the fork fits under the pallet.
+* Setup framework for reinforcement learning
+    * First attempt should be to get to a defined location and pose, i.e. properly lined up to pick up a pallet.
 
-Robot is visible in RViz
+## History / Current State
 
-7) Voice commands (demonstration)
-Speak clearly into the mic:
-
-robot go forward
-
-robot turn left
-
-robot turn right
-
-stop
-
-Why the “robot” wake word?
-To avoid accidental commands from background audio (videos, conversations, noise).
-The voice node ignores most speech unless it includes the wake word.
-
-8) Quick checks
-A) Is /cmd_vel being published?
-Open a second terminal:
-
-bash
-Copy code
-cd ~/ros2_ws
-source /opt/ros/jazzy/setup.bash
-source install/setup.bash
-ros2 topic echo /cmd_vel
-When you say robot go forward, you should see linear.x become positive briefly.
-
-B) Ensure the voice node is running only once
-bash
-Copy code
-ros2 node list | grep voice
-Expected: only one line:
-
-bash
-Copy code
-/voice_whisper_claude_cmdvel
-If you see duplicates, stop and clean up:
-
-bash
-Copy code
-pkill -f voice_whisper_claude_cmdvel
-Then run the launch again.
-
-9) Troubleshooting
-Problem: Robot moves then immediately stops (without saying “stop”)
-Common causes:
-
-Voice node running twice (duplicate publishers).
-
-Whisper picks up noise and triggers a “none/stop” command.
-
-Fixes:
-
-Confirm only one voice node:
-
-bash
-Copy code
-ros2 node list | grep voice
-Reduce noise and speak closer to the mic.
-
-Problem: No Gazebo GUI window
-Sometimes it opens behind other windows:
-
-bash
-Copy code
-wmctrl -l | grep -i gz
-wmctrl -a Gazebo
-Notes / Design Decisions
-We intentionally use local STT (faster-whisper) to keep STT cost-free and offline-capable.
-
-Claude is used only for intent parsing (text → command JSON).
-
-/cmd_vel is the standard ROS velocity interface, bridged into Gazebo via ros_gz_bridge.
-
-Contact
-If anything breaks, paste:
-
-last ~30 lines of the launch terminal log
-
-output of:
-
-bash
-Copy code
-ros2 node list
-ros2 topic info /cmd_vel -v
+v0.1: Basic 3 wheeled bot with differential drive.  World is a small warehouse.  Camera and LiDAR stream data and can be visualized in rviz2.
