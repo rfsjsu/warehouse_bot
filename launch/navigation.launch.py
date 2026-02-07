@@ -11,13 +11,15 @@ from launch_ros.actions import Node
 # - warehouse_bot.urdf : Same as simple_bot, scaled up to look like a 2 wheeled forklift
 #
 BOT_MODEL = 'simple_bot.urdf'
+# BOT_MODEL = 'warehouse_bot.urdf'
 
 # Current worlds available
 # - test.world : Plane with nothing on it.
 # - block_world_01 : 20x20 room with obstacle blocks for navigation training.
-# - Depote/model.sdf : Warehouse scene. Collision not included.
+# - Depot/model.sdf : Warehouse scene. Collision not included.
 #
 WORLD_MODEL = 'block_world_01.world'
+# WORLD_MODEL = 'Depot/model.sdf'
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('warehouse_bot')

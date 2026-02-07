@@ -33,6 +33,11 @@ source install/setup.bash
 ros2 launch warehouse_bot complete.launch.py
 ```
 
+### Topic Specific Documentation
+
+* [SLAM and Navigation](./NAV2.md)
+
+
 ## History / Current State
 
 v0.1: Basic 3 wheeled bot with differential drive.  World is a small warehouse.  Camera and LiDAR stream data and can be visualized in rviz2.
