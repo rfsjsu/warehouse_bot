@@ -23,17 +23,30 @@
         <color rgba="0 1 0 1"/>
     </material>
 
+    <material name="light_gray">
+        <color rgba="0.35 0.35 0.35 1"/>
+    </material>
+
+    <material name="gray">
+        <color rgba="0.25 0.25 0.25 1"/>
+    </material>
+
+    <material name="dark_gray">
+        <color rgba="0.15 0.15 0.15 1"/>
+    </material>
+
     <!-- Base Link -->
-    <link name="base_link">
+    <link name="base_link"/>
+    <link name="base_footprint">
         <visual>
             <geometry>
-                <box size="0.5 0.3 0.15"/>
+                <box size="1.6 1.1 0.15"/>
             </geometry>
-            <material name="blue"/>
+            <material name="dark_gray"/>
         </visual>
         <collision>
             <geometry>
-                <box size="0.5 0.3 0.15"/>
+                <box size="1.6 1.1 0.15"/>
             </geometry>
         </collision>
         <inertial>
@@ -42,17 +55,118 @@
         </inertial>
     </link>
 
-    <!-- Left Wheel -->
-    <link name="left_wheel">
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+        <origin xyz="0 0 -0.05"/>
+    </joint>
+
+    <!-- Body Link -->
+    <link name="body_link">
         <visual>
             <geometry>
-                <cylinder length="0.05" radius="0.1"/>
+                <box size="1.6 1.1 0.5"/>
+            </geometry>
+            <material name="light_gray"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="1.6 1.1 0.5"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="50.0"/>
+            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+        </inertial>
+    </link>
+
+    <!-- Rails Link -->
+    <link name="rails_link">
+        <visual>
+            <geometry>
+                <box size="0.1 1.1 1.5"/>
+            </geometry>
+            <material name="dark_gray"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.1 1.1 1.5"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="5.0"/>
+            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+        </inertial>
+    </link>
+
+    <!-- Rails Plate Link -->
+    <link name="rails_plate_link">
+        <visual>
+            <geometry>
+                <box size="0.1 1.1 0.5"/>
+            </geometry>
+            <material name="gray"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.1 1.1 0.5"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="5.0"/>
+            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+        </inertial>
+    </link>
+
+    <!-- Right Fork Link -->
+    <link name="right_fork_link">
+        <visual>
+            <geometry>
+                <box size="1 0.1 0.05"/>
             </geometry>
             <material name="black"/>
         </visual>
         <collision>
             <geometry>
-                <cylinder length="0.05" radius="0.1"/>
+                <box size="1 0.1 0.05"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+        </inertial>
+    </link>
+
+    <!-- Left Fork Link -->
+    <link name="left_fork_link">
+        <visual>
+            <geometry>
+                <box size="1 0.1 0.05"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="1 0.1 0.05"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+        </inertial>
+    </link>
+
+    <!-- Left Wheel -->
+    <link name="left_wheel">
+        <visual>
+            <geometry>
+                <cylinder length="0.05" radius="0.2"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.05" radius="0.2"/>
             </geometry>
         </collision>
         <inertial>
@@ -65,13 +179,13 @@
     <link name="right_wheel">
         <visual>
             <geometry>
-                <cylinder length="0.05" radius="0.1"/>
+                <cylinder length="0.05" radius="0.2"/>
             </geometry>
             <material name="black"/>
         </visual>
         <collision>
             <geometry>
-                <cylinder length="0.05" radius="0.1"/>
+                <cylinder length="0.05" radius="0.2"/>
             </geometry>
         </collision>
         <inertial>
@@ -84,13 +198,13 @@
     <link name="caster_wheel">
         <visual>
             <geometry>
-                <sphere radius="0.05"/>
+                <sphere radius="0.1"/>
             </geometry>
             <material name="black"/>
         </visual>
         <collision>
             <geometry>
-                <sphere radius="0.05"/>
+                <sphere radius="0.1"/>
             </geometry>
         </collision>
         <inertial>
@@ -105,7 +219,7 @@
             <geometry>
                 <box size="0.05 0.05 0.05"/>
             </geometry>
-            <material name="red"/>
+            <material name="black"/>
         </visual>
         <collision>
             <geometry>
@@ -122,13 +236,13 @@
     <link name="lidar">
         <visual>
             <geometry>
-                <cylinder length="0.05" radius="0.1"/>
+                <cylinder length="0.05" radius="0.05"/>
             </geometry>
-            <material name="green"/>
+            <material name="red"/>
         </visual>
         <collision>
             <geometry>
-                <cylinder length="0.05" radius="0.1"/>
+                <cylinder length="0.05" radius="0.05"/>
             </geometry>
         </collision>
         <inertial>
@@ -137,11 +251,47 @@
         </inertial>
     </link>
 
+    <!-- Base-Body Joint -->
+    <joint name="base_body_joint" type="fixed"> 
+            <parent link="base_link"/>
+            <child link="body_link"/>
+            <origin xyz="0 0 0.35"/>
+    </joint>
+
+    <!-- Body-Rails Joint -->
+    <joint name="body_rails_joint" type="fixed"> 
+            <parent link="body_link"/>
+            <child link="rails_link"/>
+            <origin xyz="0.85 0 0.5"/>
+    </joint>
+
+    <!-- Rails-Rails-Plate Joint -->
+    <joint name="rails_rails_plate_joint" type="fixed"> 
+            <parent link="rails_link"/>
+            <child link="rails_plate_link"/>
+            <origin xyz="0.1 0 -0.675"/>
+    </joint>
+
+    <!-- Rails-Plate_Right_Fork Joint -->
+    <joint name="rails_plate_right_fork_joint" type="fixed"> 
+            <parent link="rails_plate_link"/>
+            <child link="right_fork_link"/>
+            <origin xyz="0.55 0.3 -0.225"/>
+    </joint>
+
+    <!-- Rails-Plate_Left_Fork Joint -->
+    <joint name="rails_plate_left_fork_joint" type="fixed"> 
+            <parent link="rails_plate_link"/>
+            <child link="left_fork_link"/>
+            <origin xyz="0.55 -0.3 -0.225"/>
+    </joint>
+
+
     <!-- Left Wheel Joint -->
     <joint name="left_wheel_joint" type="continuous">
         <parent link="base_link"/>
         <child link="left_wheel"/>
-        <origin xyz="-0.2 0.175 -0.05" rpy="-1.5708 0 0"/>
+        <origin xyz="0.55 0.575 -0.05" rpy="-1.5708 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
 
@@ -149,7 +299,7 @@
     <joint name="right_wheel_joint" type="continuous">
         <parent link="base_link"/>
         <child link="right_wheel"/>
-        <origin xyz="-0.2 -0.175 -0.05" rpy="-1.5708 0 0"/>
+        <origin xyz="0.55 -0.575 -0.05" rpy="-1.5708 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
 
@@ -157,28 +307,28 @@
     <joint name="caster_wheel_joint" type="fixed">
         <parent link="base_link"/>
         <child link="caster_wheel"/>
-        <origin xyz="0.2 0 -0.1"/>
+        <origin xyz="-0.75 0 -0.15"/>
         <axis xyz="0 0 1"/>
     </joint>
 
     <!-- Camera Joint -->
     <joint name="camera_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="rails_link"/>
         <child link="camera"/>
-        <origin xyz="0.27 0 0.01" rpy="0 0 0"/>
+        <origin xyz="0.05 0 0.7" rpy="0 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
 
     <!-- Lidar Joint -->
     <joint name="lidar_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="rails_link"/>
         <child link="lidar"/>
-        <origin xyz="0 0 0.1" rpy="0 0 0"/>
+        <origin xyz="0 0 0.775" rpy="0 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
 
     <!-- Gazebo Colors -->
-    <gazebo reference="base_link">
+    <!-- <gazebo reference="base_link">
         <material>Gazebo/Blue</material>
     </gazebo>
 
@@ -205,8 +355,8 @@
     </gazebo>
 
     <gazebo reference="lidar">
-        <material>Gazebo/Green</material>
-    </gazebo>
+        <material>Gazebo/Red</material>
+    </gazebo> -->
 
     <!-- Gazebo plugin for differential drive -->
 <gazebo>
@@ -214,7 +364,7 @@
             <odom_publisher_frequency>50</odom_publisher_frequency>
             <left_joint>left_wheel_joint</left_joint>
             <right_joint>right_wheel_joint</right_joint>
-            <wheel_separation>0.35</wheel_separation>
+            <wheel_separation>1.15</wheel_separation>
             <wheel_diameter>0.2</wheel_diameter>
             <max_wheel_torque>20</max_wheel_torque>
             <max_linear_acceleration>1.0</max_linear_acceleration>
@@ -225,9 +375,11 @@
             <odom_topic>odom</odom_topic>
             <frame_id>odom</frame_id>
             <child_frame_id>base_link</child_frame_id>
+            <tf_topic>/tf</tf_topic>
         </plugin>
  
         <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+            <topic>joint_states</topic>
             <update_rate>50</update_rate>
             <joint_name>left_wheel_joint</joint_name>
             <joint_name>right_wheel_joint</joint_name>
@@ -295,7 +447,7 @@
             </scan>
             <range>
                 <min>0.2</min>
-                <max>30.0</max>
+                <max>10.0</max>
                 <resolution>0.01</resolution>
             </range>
             <noise>

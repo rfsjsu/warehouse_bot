@@ -39,6 +39,10 @@ source install/setup.bash
 ros2 launch warehouse_bot complete.launch.py
 ```
 
+### Topic Specific Documentation
+
+* [SLAM and Navigation](./NAV2.md)
+
 ## To Do
 
 * Replace simple wheeled bot with a forklift model 
@@ -50,7 +54,7 @@ ros2 launch warehouse_bot complete.launch.py
     * Layout the world in a grid, the agent can go to a specified grid and report its location.
     * Couple with computer vision and the agent can say what it sees if asked.
 * Set up Nav2
-    * SLAM to make a map of the warehouse.
+    * SLAM to make a map of the warehouse. (basic functions working, need tuning)
 * Upgrade LiDAR
     * Current lidar is 2D, missing objects too low.
     * Upgrade to 3D lidar so we can get point cloud image of shelves.
