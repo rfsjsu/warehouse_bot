@@ -95,7 +95,7 @@ ros2 launch warehouse_bot navigation.launch.py
 
 In a second terminal run
 ```
-ros2 launch nav2_bringup navigation_launch.py use_sim_time:=True params_file:=/home/rsf/forklift_project/ros2_ws/src/warehouse_bot/config/nav2_params.yaml
+ros2 launch nav2_bringup bringup_launch.py use_sim_time:=true params_file:=/home/rsf/forklift_project/ros2_ws/src/warehouse_bot/config/nav2_params.yaml
 ```
 
 In RViz load in the navigation panel.  If all the nodes started correctly the navigation panel Navigation, Localization, and Feedback shoule read a green "active".  You should now see the map and be able to set a destination pose and the robot should move to that point.  The robot will have trouble with paths that have a lot of turns.  As mentioned before in the previous section, it seems the robot has some trouble with localiztion and needs adjustment or an IMU sensor.
